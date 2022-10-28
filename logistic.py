@@ -3,8 +3,19 @@ import numpy as np
 import math
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+
 
 THRESHOLD = 0.7
+
+# Outlier Treatment
+def outlier_treatment(df, feature):
+    q1, q3 = np.percentile(df[feature], [25, 75])
+    IQR = q3 - q1 
+    lower_range = q1 - (3 * IQR) 
+    upper_range = q3 + (3 * IQR)
+    to_drop = df[(df[feature]<lower_range)|(df[feature]>upper_range)]
+    df.drop(to_drop.index, inplace=True)
 
 def calc(X, Y, W, theta):
     TP, TN, FP, FN = 0, 0, 0, 0
@@ -32,6 +43,12 @@ def calc(X, Y, W, theta):
 
 
 df = pd.read_csv('data.csv')
+
+# create a scaler object
+std_scaler = StandardScaler()
+std_scaler
+# fit and transform the data
+df_std = pd.DataFrame(std_scaler.fit_transform(df), columns=df.columns)
 
 cols = list(df.columns)[2:32]
 
