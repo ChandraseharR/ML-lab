@@ -1,0 +1,3 @@
+l = LabelEncoder()
+l.fit(df['diagnosis'])
+df['diagnosis'] = l.transform(df['diagnosis'])
